@@ -7,16 +7,16 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 
-const pgp = require('pg-promise');
+// const pgp = require('pg-promise');
 
-const db = pgp('postgres://postgre:root@host:5432/database');
-db.one('SELECT $1 AS value', 123)
-  .then((data) => {
-    console.log('DATA:', data.value)
-  })
-  .catch((error) => {
-    console.log('ERROR:', error)
-  })
+// const db = pgp('postgres://postgre:root@host:5432/database');
+// db.one('SELECT $1 AS value', 123)
+//   .then((data) => {
+//     console.log('DATA:', data.value)
+//   })
+//   .catch((error) => {
+//     console.log('ERROR:', error)
+//   })
 
 
 
@@ -24,8 +24,8 @@ db.one('SELECT $1 AS value', 123)
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -49,7 +49,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  // res.render('error');
 });
 
 module.exports = app;

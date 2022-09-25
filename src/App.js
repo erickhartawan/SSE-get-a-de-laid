@@ -13,7 +13,7 @@ import Header from './layout/Header'
 function App() {
   return (
     <Router>
-      <div className="App w-screen h-screen flex flex-1 flex-col justify-center items-center">
+      <div className="App w-screen h-screen flex flex-1 flex-col items-center">
         <Header/>
         <Routes>
           <Route path="/" element={<Landing />}/>
