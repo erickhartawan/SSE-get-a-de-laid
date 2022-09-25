@@ -1,6 +1,6 @@
-import './App.css';
-import SignUp from './screen/SignUp/SignUp';
-import Login from './screen/Login/Login';
+import './App.scss';
+import SignUp from './screen/Auth/SignUp/SignUp';
+import Login from './screen/Auth/Login/Login';
 import Landing from './screen/Landing/Landing';
 import {
   BrowserRouter as Router,
@@ -9,6 +9,7 @@ import {
   Link
 } from "react-router-dom";
 import Header from './layout/Header'
+import AuthScreen from './screen/Auth/AuthScreen';
 
 function App() {
   return (
@@ -17,8 +18,8 @@ function App() {
         <Header/>
         <Routes>
           <Route path="/" element={<Landing />}/>
-          <Route path="/signup" element={<SignUp />}/>
-          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<AuthScreen />}/>
+          <Route path="/login" element={<AuthScreen />} />
           <Route path="/landing" element={<Landing />} />
         </Routes>
       </div>
