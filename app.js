@@ -5,19 +5,18 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
-
-// const pgp = require('pg-promise');
-
-// const db = pgp('postgres://postgre:root@host:5432/database');
-// db.one('SELECT $1 AS value', 123)
-//   .then((data) => {
-//     console.log('DATA:', data.value)
-//   })
-//   .catch((error) => {
-//     console.log('ERROR:', error)
-//   })
-
+const { Client } = require("pg");
+const dotenv = require("dotenv");
+dotenv.config();
+ 
+var client = new Client({
+    user: process.env.PGUSER,
+    host: process.env.PGHOST,
+    database: process.env.PGDATABASE,
+    password: process.env.PGPASSWORD,
+    port: process.env.PGPORT
+});
+client.connect();
 
 
 
@@ -52,4 +51,4 @@ app.use(function(err, req, res, next) {
   // res.render('error');
 });
 
-module.exports = app;
+module.exports = app, client;
