@@ -1,4 +1,5 @@
 var express = require('express');
+var app = require('.././app');
 var router = express.Router();
 const { Client } = require("pg");
 const dotenv = require("dotenv");
@@ -21,17 +22,6 @@ const createUser = async () => {
         client.connect();
       }
       const res = await client.query("Insert into userdetails VALUES('" + newId + "', 'rahul', 'patel', 23, 0406704836, 'rahulghetia67@gmail.com', 'India', 'Male', ARRAY [ 'English', 'Hindi', 'Gujarati' ], ARRAY [true, true], 'root', 'https://google.com');");
-      console.log(res);
-      await client.end();
-  } catch (error) {
-      console.log(error)
-  }
-} 
-
-const validateUser = async () => {
-  try {
-      await client.connect();
-      const res = await client.query("select * from userdetails where ;");
       console.log(res.rows[0]);
       await client.end();
   } catch (error) {
@@ -39,9 +29,48 @@ const validateUser = async () => {
   }
 } 
 
+async function validateUser(email, password) {
+  try {
+    if (!client.connect()) {
+      await client.connect();
+    }
+      const res = await client.query("select * from userdetails where user_email = '" + email + "' and user_password = '" + password + "';");
+      var userData = {
+        "firstName": res.rows[0].first_name,
+        "lastName": res.rows[0].last_name,
+        "dpLink": res.rows[0].dp_link,
+
+      }
+      await client.end();
+  } catch (error) {
+      console.log(error)
+  }
+}
+
+function responseMaker (data, message, success) {
+  try {
+    // var jsonResponse = {};
+    if (data != "") {
+      var jsonResponse = {
+        "data": data,
+        "message": message,
+        "success": success
+      };
+    } else {
+      var jsonResponse = {
+        "message": message,
+        "success": success
+      };
+    }
+    return jsonResponse;
+  } catch (error) {
+      console.log(error)
+  }
+};
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.send('respond with a resourcessss');
+  res.send(responseMaker("", "hello world", true));
 });
 
 //? ===Login API===
@@ -49,22 +78,15 @@ router.get('/', function(req, res, next) {
 //? GET Request 
 router.get('/login', function(req, res, next) {
   createUser();
-  var response = {
-    "success": true,
-    "message": "enter login credentials"
-  };
-  res.json(response);
+  res.json(responseMaker("", "enter login credentials", true));
 });
 
 //? POST Request 
 router.post('/login', function(req, res, next) {
-  var userEmail = res.userEmail; //TODO change variable after discussing with the frontend team
-  var userPassword = res.password; //TODO change variable after discussing with the frontend team
-  var response = {
-    "success": true,
-    "message": "enter login credentials"
-  };
-  res.json(response);
+  var userEmail = req.body.userEmail; //TODO change variable after discussing with the frontend team
+  var userPassword = req.body.userPassword; //TODO change variable after discussing with the frontend team
+  validateUser(userEmail, userPassword);
+  res.json(responseMaker("", "correct credentials", true));
 });
 
 module.exports = router;
