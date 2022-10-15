@@ -25,7 +25,7 @@
     "react-player": "^2.10.1",
     "react-redux": "^8.0.4",
     "react-router": "^6.3.0",
-    "react-router-dom": "^6.3.0",
+    "react-router-dom": "^6.4.1",
     "react-scripts": "5.0.1",
     "sass": "^1.55.0",
     "uuid": "^9.0.0",
