@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import Header from './layout/Header'
 import AuthScreen from './screen/Auth/AuthScreen';
+import TripLocationInfo from './screen/Booking/TripLocationInfo';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/signup" element={<AuthScreen />}/>
           <Route path="/login" element={<AuthScreen />} />
           <Route path="/landing" element={<Landing />} />
+          <Route path="/tripinfo" element={<TripLocationInfo />} />
         </Routes>
       </div>
     </Router>
