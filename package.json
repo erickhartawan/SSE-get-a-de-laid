@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
     "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.2",
     "formik": "^2.2.9",
     "morgan": "^1.10.0",
     "pg-promise": "^10.12.0",
@@ -24,11 +25,12 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "sass": "^1.55.0",
+    "uuid": "^9.0.0",
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"
   },
   "scripts": {
-    "server": "node ./bin/www",
+    "server": "nodemon ./bin/www",
     "front": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
