@@ -13,7 +13,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
     "cookie-parser": "^1.4.6",
-    "csurf": "^1.11.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.2",
     "formik": "^2.2.9",
     "helmet": "^6.0.0",

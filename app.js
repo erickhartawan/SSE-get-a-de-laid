@@ -2,9 +2,12 @@ var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
+// const cookieSession = require('cookie-session')
 var logger = require("morgan");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+var helmet = require("helmet");
+var cors = require('cors');
 const { Client } = require("pg");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -17,9 +20,6 @@ var client = new Client({
     port: process.env.PGPORT,
 });
 client.connect();
-
-const csrf = require("csurf");
-const csrfProtection = csrf();
 var app = express();
 
 // view engine setup
@@ -27,6 +27,7 @@ var app = express();
 // app.set('view engine', 'jade');
 
 app.use(helmet());
+app.use(cors());
 app.use(
     helmet.contentSecurityPolicy({
         useDefaults: false,
@@ -39,7 +40,6 @@ app.use(
         },
     })
 );
-app.use(csrf());
 app.use(helmet.dnsPrefetchControl({ allow: false })); 
 app.use(helmet.frameguard({ action: 'deny' }));
 app.disable('x-powered-by');
@@ -72,4 +72,4 @@ app.use(function (err, req, res, next) {
     // res.render('error');
 });
 
-(module.exports = app), client, csrfProtection;
+(module.exports = app), client;
