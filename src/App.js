@@ -11,6 +11,7 @@ import {
 } from "react-router-dom";
 import Header from './layout/Header'
 import AuthScreen from './screen/Auth/AuthScreen';
+import UserInfo from './screen/Auth/SignUp/UserInfo';
 
 function App() {
   return (
@@ -20,6 +21,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />}/>
           <Route path="/signup" element={<AuthScreen />}/>
+          <Route path="/user-register" element={<UserInfo />}/> //register
+
           <Route path="/login" element={<AuthScreen />} />
           <Route path="/landing" element={<Landing />} />
           <Route path="/match-coupled" element={<MatchCoupled />}/>

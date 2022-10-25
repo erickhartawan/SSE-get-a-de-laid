@@ -35,13 +35,16 @@ async function validateUser(email, password) {
       await client.connect();
     }
       const res = await client.query("select * from userdetails where user_email = '" + email + "' and user_password = '" + password + "';");
+      console.log(res)
       var userData = {
         "firstName": res.rows[0].first_name,
         "lastName": res.rows[0].last_name,
         "dpLink": res.rows[0].dp_link,
 
       }
+      console.log(userData);
       await client.end();
+      return userData;
   } catch (error) {
       console.log(error)
   }
@@ -75,18 +78,19 @@ router.get('/', function(req, res, next) {
 
 //? ===Login API===
 
-//? GET Request 
-router.get('/login', function(req, res, next) {
-  createUser();
-  res.json(responseMaker("", "enter login credentials", true));
-});
+//? GET Request  
+// router.get('/login', function(req, res, next) {
+//   createUser();
+//   res.json(responseMaker("", "enter login credentials", true));
+// });
 
 //? POST Request 
 router.post('/login', function(req, res, next) {
   var userEmail = req.body.userEmail; //TODO change variable after discussing with the frontend team
   var userPassword = req.body.userPassword; //TODO change variable after discussing with the frontend team
-  validateUser(userEmail, userPassword);
-  res.json(responseMaker("", "correct credentials", true));
+  console.log(userEmail);
+  const userData = validateUser(userEmail, userPassword);
+  res.json(responseMaker(userData, "correct credentials", true));
 });
 
 module.exports = router;

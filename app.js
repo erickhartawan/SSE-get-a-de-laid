@@ -8,6 +8,8 @@ var usersRouter = require("./routes/users");
 const { Client } = require("pg");
 const dotenv = require("dotenv");
 dotenv.config();
+const helmet = require("helmet");
+var cors = require('cors')
 
 var client = new Client({
     user: process.env.PGUSER,
@@ -27,6 +29,7 @@ var app = express();
 // app.set('view engine', 'jade');
 
 app.use(helmet());
+app.use(cors());
 app.use(
     helmet.contentSecurityPolicy({
         useDefaults: false,
@@ -39,7 +42,7 @@ app.use(
         },
     })
 );
-app.use(csrf());
+// app.use(csrf());
 app.use(helmet.dnsPrefetchControl({ allow: false })); 
 app.use(helmet.frameguard({ action: 'deny' }));
 app.disable('x-powered-by');
