@@ -27,6 +27,26 @@ const createUser = async () => {
   }
 } 
 
+async function validateUser(email, password) {
+  try {
+    if (!client.connect()) {
+      await client.connect();
+    }
+      const res = await client.query("select * from userdetails where user_email = '" + email + "' and user_password = '" + password + "';");
+      console.log(res)
+      var userData = {
+        "firstName": res.rows[0].first_name,
+        "lastName": res.rows[0].last_name,
+        "dpLink": res.rows[0].dp_link,
+
+      }
+      console.log(userData);
+      await client.end();
+      return userData;
+  } catch (error) {
+      console.log(error)
+  }
+}
 
 function responseMaker (data, message, success) {
   try {

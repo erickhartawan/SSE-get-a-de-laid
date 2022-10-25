@@ -2,7 +2,7 @@ import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { MoreResources, DisplayFormikState } from "../helper";
-
+import { Link } from "react-router-dom";
 
 export const SignUp = () => {
     console.log("MyForm has been called");
@@ -91,11 +91,15 @@ export const SignUp = () => {
                                 <p style={{ color: "red" }}>{errors.password}</p>
                             )}
                         </div>
-                        <button 
-                            className="self-center justify-self-center bg-white w-fit p-1 rounded-md"
-                            type="submit">
-                            Submit
-                        </button>
+                        <Link 
+                            to="/user-register"
+                        >
+                            <button 
+                                className="self-center justify-self-center bg-white w-fit p-1 rounded-md"
+                                type="submit">
+                                Create an Account
+                            </button>
+                        </Link>
                         <DisplayFormikState props={values} />
 
                     </form>

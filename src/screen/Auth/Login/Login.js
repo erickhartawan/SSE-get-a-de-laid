@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { MoreResources, DisplayFormikState } from "../helper";
 import { useSelector, useDispatch } from 'react-redux'
 import { login, logout, toggle } from '../../../store/authSlice/authSlice';
+import axios from 'axios';
 
 function Login () {
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
@@ -13,10 +14,13 @@ function Login () {
         console.log(isLoggedIn);
     },[isLoggedIn]);
 
-    const handleOnSubmit = (e) =>{
-        e.preventDefault()
-        dispatch(toggle());
-    }
+    // const handleOnSubmit = (e) =>{
+    //     e.preventDefault()
+    //     axios.post('/login', {
+    //         userEmail: ''
+    //     })
+    //     // dispatch(toggle());
+    // }
 
     return(
         <div className="flex flex-col">
@@ -29,18 +33,21 @@ function Login () {
                         alert(JSON.stringify(values, null, 2));
                         setSubmitting(false);
                     }, 500);
+                    axios.post('http://localhost:3005/login', {
+                        userEmail: values.email,
+                        userPassword: values.password
+                    }).then(res =>{
+                        console.log(res);
+                    })
                 }}
                 validationSchema={Yup.object().shape({
                     email: Yup.string()
                         .email("Invalid email")
-                        .required("Required"),
-                    password: Yup.string()
-                        .min(6, "Too Short!")
-                        .notRequired("Required")
+                        .required("Required")
                 })}
             >
                 {({ values, touched, errors, handleChange, handleSubmit, handleBlur }) => (
-                    <form onSubmit={handleOnSubmit} className="w-100 flex flex-col bg-primary p-10 pt-3 rounded-3xl">
+                    <form onSubmit={handleSubmit} className="w-100 flex flex-col bg-primary p-10 pt-3 rounded-3xl">
                         <div className="self-center pb-5 text-3xl text-white"> Login</div>
                         <div className="w-full flex flex-row mb-5">
                             <div className="flex basis-1/2 w-full p-1">Email</div>

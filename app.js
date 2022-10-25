@@ -11,6 +11,8 @@ var cors = require('cors');
 const { Client } = require("pg");
 const dotenv = require("dotenv");
 dotenv.config();
+const helmet = require("helmet");
+var cors = require('cors')
 
 var client = new Client({
     user: process.env.PGUSER,
@@ -40,6 +42,7 @@ app.use(
         },
     })
 );
+// app.use(csrf());
 app.use(helmet.dnsPrefetchControl({ allow: false })); 
 app.use(helmet.frameguard({ action: 'deny' }));
 app.disable('x-powered-by');
