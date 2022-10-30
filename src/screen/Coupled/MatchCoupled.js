@@ -4,7 +4,7 @@ function MatchCoupled(){
     return(
         <div className="w-full items-center justify-center flex-col"> 
             <div> 
-                test matached coupled
+                test matched coupled
             </div>
         </div>
     );
