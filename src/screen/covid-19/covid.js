@@ -1,23 +1,15 @@
 import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { MoreResources, DisplayFormikState } from "../helper";
-import { Link } from "react-router-dom";
-import ReCAPTCHA from "react-google-recaptcha";
-const recaptchaRef = React.createRef();
-const siteKey = "6LfB2MUiAAAAANDPR5wPJIIcxD_Vw-JbVjFYdrV4";
-export const SignUp = () => {
-    console.log("MyForm has been called");
+import { MoreResources, DisplayFormikState } from "../Auth/helper";
+export const Covid = () => {
     return (
         <div className="flex flex-col">
             <div className="my-5 text-2xl self-center">
-                You are one step away from getting laid
-            </div>
-            <div className="my-5 text-2xl self-center">
-                sign up with email address
+                Enter Covid Vaccination Certificate Details
             </div>
             <Formik
-                initialValues={{ email: "", password: "" }}
+                initialValues={{ doc_num: "", dob: "", num_doses: 0, ihi: "", last_dose:"" }}
                 onSubmit={(values, { setSubmitting }) => {
                     setTimeout(() => {
                         alert(JSON.stringify(values, null, 2));
@@ -25,16 +17,11 @@ export const SignUp = () => {
                     }, 500);
                 }}
                 validationSchema={Yup.object().shape({
-                    email: Yup.string()
-                        .email("Invalid email")
-                        .required("Required"),
-                    password: Yup.string()
-                        .min(6, "Too Short!")
-                        .notRequired("Required"),
-                    confirmPassword: Yup.string().oneOf(
-                        [Yup.ref("password"), null],
-                        "password doesn't match"
-                    ),
+                    doc_num: Yup.string().required("Required").matches("^[0-9]{12}$", "Only 12 digits allowed"),
+                    dob: Yup.string().required("Required"),
+                    ihi: Yup.string().required("Required").matches("^[0-9]{12}$", "Only 12 digits allowed"),
+                    num_doses: Yup.number().required("Required"),
+                    last_dose: Yup.string().required("Required"),
                 })}
             >
                 {({
@@ -51,65 +38,90 @@ export const SignUp = () => {
                     >
                         <div className="self-center pb-5 text-3xl text-white">
                             {" "}
-                            Sign up
+                            Details
                         </div>
                         <div className="w-full flex flex-row mb-5">
                             <div className="flex basis-1/2 w-full p-1">
-                                Email
+                                document number
                             </div>
                             <div className="flex basis-1/2 w-full">
                                 <input
                                     className="p-1 rounded-lg"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.email}
+                                    value={values.doc_num}
                                     border={
-                                        touched.email &&
-                                        errors.email &&
+                                        touched.doc_num &&
+                                        errors.doc_num &&
                                         "1px solid red"
                                     }
                                     type="text"
-                                    name="email"
-                                    placeholder="Email"
+                                    name="doc_num"
+                                    placeholder="Enter document number"
                                 />
                             </div>
 
-                            {touched.email && errors.email && (
-                                <p style={{ color: "red" }}>{errors.email}</p>
+                            {touched.doc_num && errors.doc_num && (
+                                <p style={{ color: "red" }}>{errors.doc_num}</p>
                             )}
                         </div>
                         <div className="w-full flex flex-row mb-5">
                             <div className="flex basis-1/2 w-full p-1">
-                                Password
+                                Individual Healthcare Identifier
                             </div>
                             <div className="flex basis-1/2 w-full">
                                 <input
                                     className="p-1 rounded-lg"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.password}
+                                    value={values.ihi}
+                                    border={
+                                        touched.ihi &&
+                                        errors.ihi &&
+                                        "1px solid red"
+                                    }
+                                    type="text"
+                                    name="doc_num"
+                                    placeholder="Enter IHI number"
+                                />
+                            </div>
+
+                            {touched.ihi && errors.ihi && (
+                                <p style={{ color: "red" }}>{errors.ihi}</p>
+                            )}
+                        </div>
+                        <div className="w-full flex flex-row mb-5">
+                            <div className="flex basis-1/2 w-full p-1">
+                                Date of birth
+                            </div>
+                            <div className="flex basis-1/2 w-full">
+                                <input
+                                    className="p-1 rounded-lg"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.dob}
                                     border={
                                         touched.password &&
                                         errors.password &&
                                         "1px solid red"
                                     }
-                                    type="password"
-                                    name="password"
-                                    placeholder=""
+                                    type="date"
+                                    name="dob"
+                                    placeholder="Enter Date"
                                 />
                             </div>
-                            {touched.password && errors.password && (
-                                <p style={{ color: "red" }}>
-                                    {errors.password}
-                                </p>
-                            )}
                         </div>
                         <div className="w-full flex flex-row mb-5">
                             <div className="flex basis-1/2 w-full p-1">
-                                Confirm Password
+                                Number of doses taken
                             </div>
                             <div className="flex basis-1/2 w-full">
-                                <input
+                                <select name="num_doses" id="dose">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                                {/* <input
                                     className="p-1 rounded-lg"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
@@ -122,39 +134,36 @@ export const SignUp = () => {
                                     type="password"
                                     name="confirmPassword"
                                     placeholder=""
-                                />
+                                /> */}
                             </div>
-                            {touched.password && errors.password && (
-                                <p style={{ color: "red" }}>
-                                    {errors.password}
-                                </p>
-                            )}
                         </div>
                         <div className="w-full flex flex-row mb-5">
                             <div className="flex basis-1/2 w-full p-1">
-                                Captcha
+                                Last Dose taken
                             </div>
                             <div className="flex basis-1/2 w-full">
-                                <ReCAPTCHA
-                                    ref={recaptchaRef}
-                                    sitekey={siteKey}
-                                    // onChange={onChange}
+                                <input
+                                    className="p-1 rounded-lg"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.last_dose}
+                                    border={
+                                        touched.last_dose &&
+                                        errors.last_dose &&
+                                        "1px solid red"
+                                    }
+                                    type="date"
+                                    name="last_dose"
+                                    placeholder=""
                                 />
                             </div>
-                            {touched.password && errors.password && (
-                                <p style={{ color: "red" }}>
-                                    {errors.password}
-                                </p>
-                            )}
                         </div>
-                        <Link to="/user-register">
                             <button
                                 className="self-center justify-self-center bg-white w-fit p-1 rounded-md"
                                 type="submit"
                             >
-                                Create an Account
+                                Validate
                             </button>
-                        </Link>
                         <DisplayFormikState props={values} />
                     </form>
                 )}
@@ -163,4 +172,4 @@ export const SignUp = () => {
     );
 };
 
-export default SignUp;
+export default Covid;

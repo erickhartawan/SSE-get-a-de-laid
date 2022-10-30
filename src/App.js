@@ -1,5 +1,6 @@
 import './App.scss';
 import SignUp from './screen/Auth/SignUp/SignUp';
+import Covid from './screen/covid-19/covid';
 import Login from './screen/Auth/Login/Login';
 import Landing from './screen/Landing/Landing';
 import MatchCoupled from './screen/Matcher/MatchCoupled';
@@ -21,6 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />}/>
           <Route path="/signup" element={<AuthScreen />}/>
+          <Route path="/covid-19" element={<Covid />}/>
           <Route path="/user-register" element={<UserInfo />}/> //register
 
           <Route path="/login" element={<AuthScreen />} />

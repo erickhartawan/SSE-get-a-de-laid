@@ -23,6 +23,7 @@
     "pg-promise": "^10.12.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-google-recaptcha": "^2.1.0",
     "react-player": "^2.10.1",
     "react-redux": "^8.0.4",
     "react-router": "^6.3.0",
@@ -33,6 +34,7 @@
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"
   },
+  "resolutions": { "react-error-overlay": "6.0.9" },
   "scripts": {
     "server": "nodemon ./bin/www",
     "front": "react-scripts start",
@@ -62,6 +64,7 @@
     "autoprefixer": "^10.4.8",
     "nodemon": "^2.0.19",
     "postcss": "^8.4.16",
-    "tailwindcss": "^3.1.8"
+    "tailwindcss": "^3.1.8",
+    "react-error-overlay": "6.0.9" 
   }
 }
