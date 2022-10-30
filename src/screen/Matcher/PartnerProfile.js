@@ -27,41 +27,48 @@ function PartnerProfile() {
 
             ]; // array of url
     let travelInterest = ["Flinders Range", "Mount Lofty", "The University of Adelaide"]; // array of text
-    
+        
+    //Handle Click images
+    const handleClickImages = (url) =>{
+        console.log(url)
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
     return(
         <div className="w-full flex flex-col justify-start items-start p-4 bg-slate-100"> 
             <div className="partner-hero-img justify-center align-center w-full">
                 <img className="max-h-[25vw] rounded-lg object-scale-down flex-start" src={randomImage} alt="Profile photo of first user" />
             </div>
             <div className="partner-text-info p-2 px-4 mt-10 flex-col bg-slate-100">
-                <div className="about-partner-jumbo text-primary font-bold text-3xl"> About this person: </div>
+                <div className="about-partner-jumbo text-primary font-bold text-2xl"> About this person: </div>
                 <div className="partner-main-info mt-2">{name} | {gender} | {age}</div>
                 <div className="interest-list flex-col">
-                    <h3 className="partner-interest font-semibold text-2xl text-primary pb-2"> Here are the interests of {name}</h3>
+                    <h3 className="partner-interest font-semibold text-2xl text-primary mt-2">Topic Interests: </h3>
                     <ul className="list-disc flex-col">
                         {interest.map((each,index) =>{
                             return <li key={index}>{each}</li>
                         })}
                     </ul>
+                    <h3 className="partner-interest font-semibold text-2xl text-primary mt-2"> Travelling Interest: </h3>
+                    {travelInterest.map((each,index) =>{
+                        return <div key={index}>{each}</div>
+                    })}
 
                 </div>
-                <div className="photos masonary">
+                <div className="photos masonary flex flex-col">
+                    <h3 className="partner-interest font-semibold text-2xl text-primary mt-2"> Other Images: </h3>
                     <Masonry
                         columns={3}
                         spacing={2}
                         defaultHeight={300}
                     >
                         {photos.map((each,index) => (
-                            <div key={index}> 
+                            <div key={index} onClick={() => handleClickImages(each)}> 
                                 <img src={each}  />
                             </div>
                         ))}
                     </Masonry>
                 </div>
-                {travelInterest.map((each,index) =>{
-                    return <div key={index}>{each}</div>
-                })}
-
             </div>
         </div>  
 

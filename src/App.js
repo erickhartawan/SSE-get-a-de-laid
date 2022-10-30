@@ -12,6 +12,7 @@ import {
 import Header from './layout/Header'
 import AuthScreen from './screen/Auth/AuthScreen';
 import UserInfo from './screen/Auth/SignUp/UserInfo';
+import ChatRoom from './screen/Chat/ChatRoom';
 
 function App() {
   return (
@@ -22,10 +23,10 @@ function App() {
           <Route path="/" element={<Landing />}/>
           <Route path="/signup" element={<AuthScreen />}/>
           <Route path="/user-register" element={<UserInfo />}/> //register
-
           <Route path="/login" element={<AuthScreen />} />
           <Route path="/landing" element={<Landing />} />
           <Route path="/match-coupled" element={<MatchCoupled />}/>
+          <Route path="/chatroom" element={<ChatRoom />}/>
         </Routes>
       </div>
     </Router>

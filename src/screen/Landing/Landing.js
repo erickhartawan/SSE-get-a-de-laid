@@ -5,7 +5,7 @@ function Landing () {
     return(
         <>
             <div className="w-full flex flex-row">
-                <div className="landing-left top-4 flex flex-row flex-1 p-4 justify-centre">
+                <div className="landing-left top-4 flex flex-row flex-1 p-4 pr-0 justify-centre">
                     <PartnerVideo />
                 </div>
                 {/* <div className="flex flex-1">

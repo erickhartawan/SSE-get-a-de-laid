@@ -1,0 +1,52 @@
+[
+    {
+        "messageId": "1",
+        "senderId":"1",
+        "receiverId":"3",
+        "messageContent":"Roses are Red, Violet are blue. When I heard the word great, i thought of you",
+        "timestamp":"1667092228542"
+    },
+    {
+        "messageId": "2",
+        "senderId":"3",
+        "receiverId":"1",
+        "messageContent":" Although It's winter, I can feel the flower growing in my heart",
+        "timestamp":"1667092238542"
+    },
+    {
+        "messageId": "3",
+        "senderId":"1",
+        "receiverId":"3",
+        "messageContent":"Are you a pokemon? cause I'd like to pikachu",
+        "timestamp":"1667092268542"
+    },
+    {
+        "messageId": "4",
+        "senderId":"3",
+        "receiverId":"1",
+        "messageContent":"You can catch me anytime ;)",
+        "timestamp":"1667096298542"
+    },
+    {
+        "messageId": "5",
+        "senderId":"3",
+        "receiverId":"1",
+        "messageContent":"I will definitely use the move Attract to make you fall for me ;) ",
+        "timestamp":"1667096528542"
+    },
+    {
+        "messageId": "6",
+        "senderId":"1",
+        "receiverId":"3",
+        "messageContent":"I am infatuated with love and can't think clearly",
+        "timestamp":"1667096528542"
+    },
+    {
+        "messageId": "7",
+        "senderId":"3",
+        "receiverId":"1",
+        "messageContent":"Now we go to the restaurant",
+        "timestamp":"1667096528542"
+    }
+
+]
