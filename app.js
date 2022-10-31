@@ -11,7 +11,6 @@ var cors = require('cors');
 const { Client } = require("pg");
 const dotenv = require("dotenv");
 dotenv.config();
-const helmet = require("helmet");
 var cors = require('cors')
 
 var client = new Client({
