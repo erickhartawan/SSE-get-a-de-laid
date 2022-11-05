@@ -29,7 +29,7 @@ function Login () {
             travelInterest:["Flinders Range", "Mount Lofty", "The University of Adelaide"]
         }
         dispatch(setCurrUser(initialData));
-        navigate("/landing");
+        // navigate("/landing");
         console.log('handle on submit is working on login page')
 
     //     axios.post('/login', {
@@ -55,6 +55,9 @@ function Login () {
                         userPassword: values.password
                     }).then(res =>{
                         console.log(res);
+                        navigate("/landing", res.data);
+                    }).catch(err =>{
+                        console.error("Password / Email not correct")
                     })
                 }}
                 validationSchema={Yup.object().shape({
@@ -64,7 +67,7 @@ function Login () {
                 })}
             >
                 {({ values, touched, errors, handleChange, handleSubmit, handleBlur }) => (
-                    <form onSubmit={handleOnSubmit} className="w-100 flex flex-col bg-primary p-10 pt-3 rounded-3xl">
+                    <form onSubmit={handleSubmit} className="w-100 flex flex-col bg-primary p-10 pt-3 rounded-3xl">
                         <div className="self-center pb-5 text-3xl text-white"> Login</div>
                         <div className="w-full flex flex-row mb-5">
                             <div className="flex basis-1/2 w-full p-1">Email</div>

@@ -5,7 +5,11 @@ const { Pool } = require("pg");
 const dotenv = require("dotenv");
 dotenv.config();
 const { v4 } = require("uuid");
+const jwt = require('jsonwebtoken');
+const cors = require('cors');
 var crypto = require("crypto");
+var token = require('crypto').randomBytes(64).toString('hex');
+console.log(token);
 var sql = require("yesql").pg;
 const { initializeApp } = require("firebase/app");
 const {
@@ -14,13 +18,14 @@ const {
     sendEmailVerification,
     browserSessionPersistence,
     setPersistence
-    
+
 } = require("firebase/auth");
 var onAuthStateChanged = require("firebase/auth");
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// app.use(cors());
 const firebaseConfig = {
 
     apiKey: process.env.APIKEY,
@@ -32,8 +37,8 @@ const firebaseConfig = {
     measurementId: process.env.MEASUREMENTID,
 };
 const actionCodeSettings = {
-  url: "http://localhost:3005/home", // URL you want to be redirected to after email verification
-  handleCodeInApp: true
+    url: "http://localhost:3000/landing", // URL you want to be redirected to after email verification
+    handleCodeInApp: true
 }
 
 // Initialize Firebase
@@ -48,7 +53,7 @@ setPersistence(auth, browserSessionPersistence).then(() => {
     // Handle Errors here.
     const errorCode = error.code;
     const errorMessage = error.message;
-  });
+});
 
 dotenv.config();
 var client = new Pool({
@@ -83,9 +88,20 @@ function responseMaker(data, message, success) {
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-    res.send(responseMaker({}, "hello world", true));
-});
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]
 
+    if (token == null) return res.sendStatus(401)
+
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+        console.log(err)
+
+        if (err) return res.sendStatus(403)
+
+        req.user = user
+        res.send(responseMaker({token}, "hello world", true));
+    });
+});
 //? ===Login API===
 
 //? GET Request
@@ -97,20 +113,32 @@ router.get("/login", function (req, res, next) {
 router.post("/login", async function (req, res, next) {
     var userEmail = req.body.userEmail; //TODO change variable after discussing with the frontend team
     var userPassword = req.body.userPassword; //TODO change variable after discussing with the frontend team
-    var userData = client.query(
-        "select * from userdetails where user_email = '" +
-            userEmail +
-            "' and user_password = '" +
-            userPassword +
-            "';"
+    userPasswordHash = crypto
+        .createHash("sha256")
+        .update(userPassword)
+        .digest("base64");
+    userData = await client.query(
+        sql(
+            "SELECT * FROM userdetails where user_email = :userEmail AND user_password = :userPassword;"
+        )({
+            userEmail: userEmail,
+            userPassword: userPasswordHash,
+        })
     );
-    if ((await userData).rowCount > 0)
+    if ((await userData).rowCount > 0) {
+        var userToken = jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
+        (await userData).rows[0]['token'] = userToken;
         res.json(responseMaker((await userData).rows[0], "user found", true));
+
+
+    }
+
     else res.json(responseMaker({}, "user not found", true));
 });
 
 router.post("/signup", async function (req, res, next) {
     var newId = v4();
+    console.log(req.body);
     var userFirstName = req.body.firstName;
     var userLastName = req.body.lastName;
     var userAge = req.body.age;
@@ -118,12 +146,12 @@ router.post("/signup", async function (req, res, next) {
     var userGender = req.body.gender;
     var userLanguage = req.body.language;
     var userVaccineStatus = req.body.vaccineStatus;
-    var userDpLink = req.body.dpLink;
+    var userDpLink = req.body.dpLink; // one link for video 
     var userCountry = req.body.country;
     var userBio = req.body.bio;
     var userInterests = req.body.interest;
     let userLastLogin = new Date();
-    var userImages = req.body.images;
+    var userImages = req.body.images; // array of links for images
     var userTravelInterests = req.body.travelInterests;
     var userEmail = req.body.userEmail; //TODO change variable after discussing with the frontend team
     var userPassword = req.body.userPassword; //TODO change variable after discussing with the frontend team
@@ -131,7 +159,9 @@ router.post("/signup", async function (req, res, next) {
         .createHash("sha256")
         .update(userPassword)
         .digest("base64");
-    userVaccineStatus = userVaccineStatus.toString().split(",");
+    userVaccineStatus = userVaccineStatus.split(","); // from string to arrays
+    userTravelInterests = userTravelInterests.split(","); // from strings to arrays
+    userImages = userImages.split(",")
     userLanguage = userLanguage.toString().split(",");
     var userData = await client.query(
         sql(
@@ -185,7 +215,7 @@ router.post("/signup", async function (req, res, next) {
                 // Email verification sent!
                 console.log("Email verification sent!");
             });
-            
+            res.json({ "message": "Your sign in is done" });
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -197,27 +227,27 @@ router.post("/signup", async function (req, res, next) {
 });
 
 router.get("/home", async function (req, res, next) {
-  var userData = client.query("select * from userprofile;");
-if ((await userData).rowCount > 0)
-    res.json(responseMaker((await userData).rows[0], "user found", true));
-else res.json(responseMaker({}, "user not found", true));
+    var userData = client.query("select * from userprofile;");
+    if ((await userData).rowCount > 0)
+        res.json(responseMaker((await userData).rows[0], "user found", true));
+    else res.json(responseMaker({}, "user not found", true));
 });
 
 router.get("/singlechat", async function (req, res, next) {
 
     var userData = client.query("select * from userprofile;");
-  if ((await userData).rowCount > 0)
-      res.json(responseMaker((await userData).rows[0], "user found", true));
-  else res.json(responseMaker({}, "user not found", true));
-  });
+    if ((await userData).rowCount > 0)
+        res.json(responseMaker((await userData).rows[0], "user found", true));
+    else res.json(responseMaker({}, "user not found", true));
+});
 
-  router.get("/chats", async function (req, res, next) {
+router.get("/chats", async function (req, res, next) {
 
     var userData = client.query("select * from userprofile;");
-  if ((await userData).rowCount > 0)
-      res.json(responseMaker((await userData).rows[0], "user found", true));
-  else res.json(responseMaker({}, "user not found", true));
-  });
+    if ((await userData).rowCount > 0)
+        res.json(responseMaker((await userData).rows[0], "user found", true));
+    else res.json(responseMaker({}, "user not found", true));
+});
 
 
 module.exports = router;
