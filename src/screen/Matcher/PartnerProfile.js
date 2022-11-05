@@ -2,6 +2,7 @@ import axios from 'axios';
 import React,{useEffect} from 'react';
 import { Masonry } from '@mui/lab';
 import OtherUsers from './OtherUsers.json';
+import { useSelector } from 'react-redux'
 // import image1 from '../../assets/placeholders/1.jpg'
 function PartnerProfile(props) {
     const {isOwnProfile,user_id} = props
@@ -21,22 +22,17 @@ function PartnerProfile(props) {
     let interest = []; // array of text
     let photos = []; // array of url
     let travelInterest = []; // array of text
-
-    if(isOwnProfile){
-        name = "Elon Musk"; // string
-        gender = "Male"; // string
-        age = 51; // number
-        interest = ['Electric Cars', 'Space Colonies', 'Tunnels', 'AI']; // array of text
-        photos = ['https://i.imgur.com/aVTkclb.jpeg',
-                    'https://i.imgur.com/7gm1pfG.jpeg',
-                    'https://i.imgur.com/0f1XJOA.jpeg',
-                    'https://i.imgur.com/W3GgSlH.jpeg',
-                    'https://i.imgur.com/dYWukdq.png',
-                    'https://i.imgur.com/PtbFyi9.jpeg',
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBC3g042dfnfma62D0LdTmDJp3FxCE4t5Tnw&usqp=CAU',
-                    'https://i0.wp.com/realibleworldnews.com/wp-content/uploads/2021/05/elonmusk.wario_-2.jpg?fit=1196%2C720&ssl=1']; // array of url
-        travelInterest = ["Flinders Range", "Mount Lofty", "The University of Adelaide"]; // array of text
-    } else{
+    
+    //Selector to get data from store
+    // bit inefficient but it's ok
+    name = useSelector(state => state.currUser.userName);
+    gender = useSelector(state => state.currUser.gender);
+    age = useSelector(state => state.currUser.age)
+    interest = useSelector(state => state.currUser.interest);
+    photos = useSelector(state => state.currUser.photos);
+    travelInterest = useSelector(state => state.currUser.travelInterest);
+    
+    if(isOwnProfile == false){
         const displayData = OtherUsers.filter(e => e.userId == user_id);
         console.log(displayData)
         if(displayData.length > 0){
@@ -48,7 +44,6 @@ function PartnerProfile(props) {
             travelInterest = displayData[0].travelInterest
         }
     }
-    
         
     //Handle Click images
     const handleClickImages = (url) =>{
@@ -85,8 +80,8 @@ function PartnerProfile(props) {
                     <div className="photos masonary flex flex-col justify-center">
                         <h3 className="partner-interest font-semibold text-2xl text-primary mt-2 justify-center mb-2 "> Other Images: </h3>
                         <Masonry
-                            columns={3}
-                            spacing={2}
+                            columns={2}
+                            spacing={1}
                             defaultHeight={500}
                         >
                             {photos.map((each,index) => (
