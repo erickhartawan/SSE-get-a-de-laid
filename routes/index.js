@@ -12,6 +12,9 @@ const {
     getAuth,
     createUserWithEmailAndPassword,
     sendEmailVerification,
+    browserSessionPersistence,
+    setPersistence
+    
 } = require("firebase/auth");
 var onAuthStateChanged = require("firebase/auth");
 // TODO: Add SDKs for Firebase products that you want to use
@@ -29,7 +32,8 @@ const firebaseConfig = {
     measurementId: process.env.MEASUREMENTID,
 };
 const actionCodeSettings = {
-  url: "http://localhost:3005/home" // URL you want to be redirected to after email verification
+  url: "http://localhost:3005/home", // URL you want to be redirected to after email verification
+  handleCodeInApp: true
 }
 
 // Initialize Firebase
@@ -37,6 +41,14 @@ const firebaseApp = initializeApp(firebaseConfig);
 
 // Initialize Firebase Authentication and get a reference to the service
 const auth = getAuth(firebaseApp);
+setPersistence(auth, browserSessionPersistence).then(() => {
+    return signInWithEmailAndPassword(auth, email, password);
+
+}).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });
 
 dotenv.config();
 var client = new Pool({
@@ -190,5 +202,22 @@ if ((await userData).rowCount > 0)
     res.json(responseMaker((await userData).rows[0], "user found", true));
 else res.json(responseMaker({}, "user not found", true));
 });
+
+router.get("/singlechat", async function (req, res, next) {
+
+    var userData = client.query("select * from userprofile;");
+  if ((await userData).rowCount > 0)
+      res.json(responseMaker((await userData).rows[0], "user found", true));
+  else res.json(responseMaker({}, "user not found", true));
+  });
+
+  router.get("/chats", async function (req, res, next) {
+
+    var userData = client.query("select * from userprofile;");
+  if ((await userData).rowCount > 0)
+      res.json(responseMaker((await userData).rows[0], "user found", true));
+  else res.json(responseMaker({}, "user not found", true));
+  });
+
 
 module.exports = router;
