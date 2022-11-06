@@ -2,31 +2,54 @@ import React,{useEffect} from 'react';
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { MoreResources, DisplayFormikState } from "../helper";
+import axios from 'axios';
 
 function UserInfo() {
+    const handleOnSubmitUserDetails = (e,data) =>{
+        e.preventDefault();
+        data.vaccineStatus = "true,true";
+        console.log("insude handle submit user detts")
+        axios.post("http://127.0.0.1:3005/signup", data).then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.error(err);
+        })
+    }
     
     return ( 
         <div className="flex flex-col">
             <div className="my-5 text-2xl self-center">Please provide your information</div>
             <Formik
                 initialValues={{ 
-                    first_name: "", 
-                    last_name:"",
+                    firstName: "", 
+                    lastName:"",
                     age: "",
-                    phone_number: "",
+                    phoneNumber: "",
                     gender: "",
-                    language:"",
-                    vaccine_status:"",
-                    dp_link:"",
+                    language:"englishh",
+                    vaccineStatus:"true,true", //temp
+                    dpLink:"",
                     bio:"",
                     interest:"",
                     images:"",
+                    userEmail:"hartawanerick@gmail.com", //temp
+                    userPassword:"qwertyuiop[]", // temp
+                    country:"australia", // temp
+                    travelInterests:"adelaide,valley,glenelg"
+                    
+
                 }}
-                onSubmit={(values, { setSubmitting }) => {
-                    setTimeout(() => {
-                        alert(JSON.stringify(values, null, 2));
-                        setSubmitting(false);
-                    }, 500);
+                onSubmit = {(values, { setSubmitting }) => {
+                    // setTimeout(() => {
+                    //     alert(JSON.stringify(values, null, 2));
+                // }, 500);
+                    setSubmitting(false);
+                    console.log('inside handle');
+                    axios.post("http://127.0.0.1/signup", values).then(res => {
+                        console.log(res);
+                    }).catch(err => {
+                        console.error(err);
+                    })
                 }}
                 validationSchema={Yup.object().shape({
                     email: Yup.string()
@@ -38,7 +61,7 @@ function UserInfo() {
                 })}
             >
                 {({ values, touched, errors, handleChange, handleSubmit, handleBlur }) => (
-                    <form onSubmit={handleSubmit} className="w-100 flex flex-col bg-primary p-10 pt-3 rounded-3xl">
+                    <form onSubmit={(e) => {handleOnSubmitUserDetails(e,values)}} className="w-100 flex flex-col bg-primary p-10 pt-3 rounded-3xl">
                         <div className="self-center pb-5 text-3xl text-white">Tell us a bit about yourself</div>
                         <div className="w-full flex flex-row mb-5">
                             <div className="flex basis-1/2 w-full p-1">First name</div>
@@ -47,9 +70,9 @@ function UserInfo() {
                                     className="p-1 rounded-lg"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.first_name}
+                                    value={values.firstName}
                                     type="text"
-                                    name="first_name"
+                                    name="firstName"
                                     placeholder="Email"
                                 />
                             </div>
@@ -62,9 +85,9 @@ function UserInfo() {
                                     className="p-1 rounded-lg"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.last_name}
+                                    value={values.lastName}
                                     type="text"
-                                    name="last_name"
+                                    name="lastName"
                                     placeholder="Email"
                                 />
                             </div>
@@ -77,9 +100,9 @@ function UserInfo() {
                                     className="p-1 rounded-lg"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.images}
+                                    value={values.dpLink}
                                     type="text"
-                                    name="images"
+                                    name="dpLink"
                                     placeholder="link to your video"
                                 />
                             </div>
@@ -201,9 +224,9 @@ function UserInfo() {
                                     className="p-1 rounded-lg"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.phone_number}
+                                    value={values.phoneNumber}
                                     type="text"
-                                    name="phone_number"
+                                    name="phoneNumber"
                                     placeholder="Email"
                                 />
                             </div>
@@ -226,16 +249,16 @@ function UserInfo() {
                         </div>
 
                         <div className="w-full flex flex-row mb-5">
-                            <div className="flex basis-1/2 w-full p-1">Upload your Profile Picture</div>
+                            <div className="flex basis-1/2 w-full p-1">Provide link to your images</div>
                             <div className="flex basis-1/2 w-full">
                                 <input
                                     className="p-1 rounded-lg"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.email}
-                                    type="file"
-                                    name="dp_link"
-                                    placeholder="Link to your display photo"
+                                    value={values.images}
+                                    type="text"
+                                    name="images"
+                                    placeholder="Links to your display photo. comma seperated links"
                                 />
                             </div>
                         </div>

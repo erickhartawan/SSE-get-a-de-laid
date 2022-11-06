@@ -19,6 +19,9 @@ function Header() {
                 <li className="mx-4">
                     <Link to="/landing">Landing Page</Link>
                 </li>
+                <li className="mx-4">
+                    <Link to="/user/4"> Find your match</Link>
+                </li>
             </ul>
         </nav>
     </div>

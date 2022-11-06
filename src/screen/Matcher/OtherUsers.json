@@ -1,0 +1,29 @@
+[
+    {
+        "userId": "4",
+        "name": "Robert Downey Junior",
+        "gender": "male",
+        "age": 35,
+        "interest": ["robot","weapon","peace","Artificial Intelligence"],
+        "photos": ["https://i.imgur.com/gi8RkWD.gif", "https://i.imgur.com/MWSwLbF.png","https://i.imgur.com/pjry4ts.gif","https://i.imgur.com/kA1iCMm.png","https://i.imgur.com/z9YtWKo.jpeg","https://i.imgur.com/JgTWt4c.jpeg" ],
+        "travelInterest": ["Avengers Compound", "New York", "Outer Space"]
+    },
+    {
+        "userId": "5",
+        "name": "Chris Hemsworth",
+        "gender": "male",
+        "age": 38,
+        "interest": ["Flying", "Reporting", "Hammer"],
+        "photos": ["https://i.imgur.com/s5JDaRa.gif","https://i.imgur.com/J0dBT2O.jpeg","https://i.imgur.com/EpgTE.png","https://i.imgur.com/wJspPig.jpeg","https://i.imgur.com/5EgsgFU.gif","https://i.imgur.com/EShenJX.gif" ],
+        "travelInterest": ["Australia", "New York", "Byron Bay"]
+    },
+    {
+        "userId": "6",
+        "name": "Lauren German",
+        "gender": "female",
+        "age": 30,
+        "interest": ["Detective", "Crime", "Acting"],
+        "photos": ["https://i.imgur.com/RcFN4HM.jpg","https://media.gettyimages.com/photos/actress-lauren-german-attends-the-lucifer-press-room-during-comiccon-picture-id480300682?k=20&m=480300682&s=612x612&w=0&h=mT5gWQfI03HULNz8HqL3sq-D6TbJaSFHJCE8pfXWSRA=","https://www.gettyimages.com.au/detail/news-photo/lauren-german-and-tom-ellis-in-the-lucifer-stay-good-devil-news-photo/533109710","https://media.gettyimages.com/photos/actress-lauren-german-attends-the-fox-fall-party-at-catch-on-25-2017-picture-id853928292?s=612x612" ],
+        "travelInterest": ["Australia", "America", "Los Angeles"]
+    }
+]
