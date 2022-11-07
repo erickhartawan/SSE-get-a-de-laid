@@ -4,12 +4,11 @@ var router = express.Router();
 const { Pool } = require("pg");
 const dotenv = require("dotenv");
 dotenv.config();
+
+var sanitizer = require('sanitize')();
 const { v4 } = require("uuid");
 const jwt = require('jsonwebtoken');
-const cors = require('cors');
 var crypto = require("crypto");
-var token = require('crypto').randomBytes(64).toString('hex');
-console.log(token);
 var sql = require("yesql").pg;
 const { initializeApp } = require("firebase/app");
 const {
@@ -21,6 +20,7 @@ const {
 
 } = require("firebase/auth");
 var onAuthStateChanged = require("firebase/auth");
+const { Sanitizer } = require("sanitize");
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 // Your web app's Firebase configuration
@@ -93,7 +93,7 @@ router.get("/", function (req, res, next) {
 
     if (token == null) return res.sendStatus(401)
 
-    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+    jwt.verify(token, process.env.APP_TOKEN, (err, user) => {
         console.log(err)
 
         if (err) return res.sendStatus(403)
@@ -106,13 +106,26 @@ router.get("/", function (req, res, next) {
 
 //? GET Request
 router.get("/login", function (req, res, next) {
-    res.json(responseMaker({}, "enter login credentials", true));
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]
+
+    if (token == null) return res.sendStatus(401)
+
+    jwt.verify(token, process.env.APP_TOKEN, (err, user) => {
+        console.log(err)
+
+        if (err) return res.sendStatus(403)
+
+        req.user = user
+        res.json(responseMaker({token}, "enter login credentials", true));
+    });
+    
 });
 
 //? POST Request
 router.post("/login", async function (req, res, next) {
-    var userEmail = req.body.userEmail; //TODO change variable after discussing with the frontend team
-    var userPassword = req.body.userPassword; //TODO change variable after discussing with the frontend team
+    var userEmail = sanitizer.value(req.body.userEmail, 'string'); //TODO change variable after discussing with the frontend team
+    var userPassword = sanitizer.value(req.body.userPassword, 'string'); //TODO change variable after discussing with the frontend team
     userPasswordHash = crypto
         .createHash("sha256")
         .update(userPassword)
@@ -125,8 +138,19 @@ router.post("/login", async function (req, res, next) {
             userPassword: userPasswordHash,
         })
     );
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]
+
+    if (token == null) return res.sendStatus(401)
+
+    jwt.verify(token, process.env.APP_TOKEN, async (err, user) => {
+        console.log(err)
+
+        if (err) return res.sendStatus(403)
+
+        req.user = user
     if ((await userData).rowCount > 0) {
-        var userToken = jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
+        var userToken = jwt.sign(username, process.env.APP_TOKEN, { expiresIn: '1800s' });
         (await userData).rows[0]['token'] = userToken;
         res.json(responseMaker((await userData).rows[0], "user found", true));
 
@@ -134,27 +158,27 @@ router.post("/login", async function (req, res, next) {
     }
 
     else res.json(responseMaker({}, "user not found", true));
+    });
 });
 
 router.post("/signup", async function (req, res, next) {
     var newId = v4();
-    console.log(req.body);
-    var userFirstName = req.body.firstName;
-    var userLastName = req.body.lastName;
-    var userAge = req.body.age;
-    var userPhoneNumber = req.body.phoneNumber;
-    var userGender = req.body.gender;
-    var userLanguage = req.body.language;
-    var userVaccineStatus = req.body.vaccineStatus;
-    var userDpLink = req.body.dpLink; // one link for video 
-    var userCountry = req.body.country;
-    var userBio = req.body.bio;
-    var userInterests = req.body.interest;
+    var userFirstName = sanitizer.value( req.body.firstName, 'string');
+    var userLastName = sanitizer.value(req.body.lastName, 'string') ;
+    var userAge = sanitizer.value(req.body.age, 0);
+    var userPhoneNumber = sanitizer.value(req.body.phoneNumber, 0);
+    var userGender = sanitizer.value(req.body.gender, 'NA');
+    var userLanguage = sanitizer.value(req.body.language, 'NA');
+    var userVaccineStatus = sanitizer.value(req.body.vaccineStatus, 'false,false');
+    var userDpLink = sanitizer.value(req.body.dpLink, 'https://picsum.photos/seed/picsum/200/300'); // one link for video 
+    var userCountry = sanitizer.value(req.body.country, 'NA');
+    var userBio = sanitizer.value(req.body.bio, 'hehe');
+    var userInterests = sanitizer.value(req.body.interest, 'cricket,football');
     let userLastLogin = new Date();
-    var userImages = req.body.images; // array of links for images
-    var userTravelInterests = req.body.travelInterests;
-    var userEmail = req.body.userEmail; //TODO change variable after discussing with the frontend team
-    var userPassword = req.body.userPassword; //TODO change variable after discussing with the frontend team
+    var userImages = sanitizer.value(req.body.images, 'https://picsum.photos/seed/picsum/200/300'); // array of links for images
+    var userTravelInterests = sanitizer.value(req.body.travelInterests, 'bali,las vegas');
+    var userEmail = sanitizer.value(req.body.userEmail, 'hehe@hehe.com'); //TODO change variable after discussing with the frontend team
+    var userPassword = sanitizer.value(req.body.userPassword, 'root'); //TODO change variable after discussing with the frontend team
     userPasswordHash = crypto
         .createHash("sha256")
         .update(userPassword)
