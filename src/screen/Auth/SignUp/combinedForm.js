@@ -5,7 +5,10 @@ import { MoreResources, DisplayFormikState } from "../helper";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import ReCAPTCHA from "react-google-recaptcha";
+import VideoRecorder from 'react-video-recorder'
+
 const recaptchaRef = React.createRef();
+
 const siteKey = "6LfB2MUiAAAAANDPR5wPJIIcxD_Vw-JbVjFYdrV4";
 
 export const CombinedForm = () => {
@@ -205,7 +208,7 @@ export const CombinedForm = () => {
                                             }
                                             type="password"
                                             name="confirmPassword"
-                                            placeholder="********"
+                                            placeholder="**********"
                                         />
                                     </div>
                                     {touched.password && errors.password && (
@@ -296,6 +299,14 @@ export const CombinedForm = () => {
                                             placeholder="link to your video"
                                         />
                                     </div>
+                                </div>
+                                <div className="p-10">
+                                <VideoRecorder
+                                    onRecordingComplete={(videoBlob) => {
+                                    // Do something with the video...
+                                    console.log('videoBlob', videoBlob)
+                                    }}
+                                />
                                 </div>
                                 <div className="w-full flex flex-row mb-5">
                                     <div className="flex basis-1/2 w-full p-1">
@@ -490,11 +501,11 @@ export const CombinedForm = () => {
                             <div className="flex flex-col">
                                 <div className="self-center pb-5 text-3xl text-white">
                                     {" "}
-                                    Details
+                                    Covid vaccination details
                                 </div>
                                 <div className="w-full flex flex-row mb-5">
                                     <div className="flex basis-1/2 w-full p-1">
-                                        document number
+                                        Document Number
                                     </div>
                                     <div className="flex basis-1/2 w-full">
                                         <input

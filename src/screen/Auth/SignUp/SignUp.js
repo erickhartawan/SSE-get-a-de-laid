@@ -156,7 +156,7 @@ export const SignUp = () => {
                                 Create an Account
                             </button>
                         </Link>
-                        <DisplayFormikState props={values} />
+                        {/* <DisplayFormikState props={values} /> */}
                     </form>
                 )}
             </Formik>

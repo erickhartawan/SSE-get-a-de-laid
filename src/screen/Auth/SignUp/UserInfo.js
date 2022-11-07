@@ -268,7 +268,7 @@ function UserInfo() {
                             type="submit">
                             Submit
                         </button>
-                        <DisplayFormikState props={values} />
+                        {/* <DisplayFormikState props={values} /> */}
 
                     </form>
                 )}

@@ -165,7 +165,7 @@ export const Covid = () => {
                             >
                                 Validate
                             </button>
-                        <DisplayFormikState props={values} />
+                        {/* <DisplayFormikState props={values} /> */}
                     </form>
                 )}
             </Formik>

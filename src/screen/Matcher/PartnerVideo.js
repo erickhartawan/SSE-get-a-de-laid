@@ -19,7 +19,7 @@ function PartnerVideo(props) {
     return (
         <div className="flex flex-col rounded-xl">
             <h3 className="partner-interest font-semibold text-2xl text-primary mt-2 justify-center mb-4">{isOwnProfile ? "Your video profile": "Check this video profile"}</h3>
-            <ReactPlayer url={userVideo} width="50vw" height="420px" playing={false}/>
+            <ReactPlayer url={userVideo} width="50vw" height="420px" playing={true}/>
         </div>
 
     );

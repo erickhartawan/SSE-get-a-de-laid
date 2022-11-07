@@ -24,6 +24,7 @@ function PartnerProfile(props) {
     let images = [""];
     let profileImage="";
     let vaccineStatus= [];
+    let about ="About you";
     
     
 
@@ -57,6 +58,8 @@ function PartnerProfile(props) {
             images = displayData[0].photos
             travelInterest = displayData[0].travelInterest
             profileImage= displayData[0].photos[0]
+            about ="About this person: ";
+    
             
 
             // dpLink = displayData[0].dpLink
@@ -80,7 +83,7 @@ function PartnerProfile(props) {
                     <img className="max-h-[35vh] rounded-lg object-scale-down flex-start" src={profileImage} alt="Profile photo of first user" />
                 </div>
                 <div className="partner-text-info p-2 px-4 mt-10 flex-col bg-slate-100 justify-center">
-                    <div className="about-partner-jumbo text-primary font-bold text-2xl justify-center"> About this person: </div>
+                    <div className="about-partner-jumbo text-primary font-bold text-2xl justify-center">{about}</div>
                     <div className="partner-main-info mt-2 justify-center">{name} | {gender} | {age}</div>
                     <div className="interest-list flex-col">
                         <h3 className="partner-interest font-semibold text-2xl text-primary mt-2 justify-center">Topic Interests: </h3>
