@@ -12,7 +12,7 @@ function VacIndicator(props){
                 <div className="text-white text-xs">1st</div>
             </div>
             <div className={`secon-dose ${backgroundColor2} w-full h-full flex justify-center items-center border-2  border-black border-l-0` }>
-                <div className="text-white text-xs">2st</div>
+                <div className="text-white text-xs">2nd</div>
             </div>
         </div>
     );

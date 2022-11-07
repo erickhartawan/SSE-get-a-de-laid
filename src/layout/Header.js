@@ -11,7 +11,7 @@ function Header() {
             </div>
             <ul className="flex flex-row p-6">
                 <li className="mx-4">
-                    <Link to="/signup">Sign up</Link>
+                    <Link to="/user-form">Sign up</Link>
                 </li>
                 <li className="mx-4">
                     <Link to="/login">Login</Link>
