@@ -9,6 +9,8 @@ var usersRouter = require("./routes/users");
 var helmet = require("helmet");
 var cors = require('cors');
 const { Client } = require("pg");
+var session = require("express-session");
+var csurf = require("csurf");
 const dotenv = require("dotenv");
 dotenv.config();
 var cors = require('cors')
@@ -30,6 +32,17 @@ const rateLimit = require("express-rate-limit");
         message: "Too many requests from this IP, please try again"
     });
 app.use(limiter);
+app.use(session({
+    resave: true,
+    saveUninitialized: true,
+    secret: "notagoodsecret",
+    cookie: {httpOnly: true}
+}));
+app.use(csurf());
+app.use(function (req, res, next) {
+    res.locals.csrftoken = req.session._csrf;
+    next();
+});
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
