@@ -35,18 +35,12 @@ app.use(limiter);
 app.use(session({
     resave: true,
     saveUninitialized: true,
-    secret: "notagoodsecret",
-    cookie: {httpOnly: true}
+    secret: process.env.APP_TOKEN,
+    cookie: {
+        httpOnly: true
+    },
+    resave: false,
 }));
-app.use(csurf());
-app.use(function (req, res, next) {
-    res.locals.csrftoken = req.session._csrf;
-    next();
-});
-
-// view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
 
 app.use(helmet());
 app.use(cors());
@@ -55,10 +49,6 @@ app.use(
         useDefaults: false,
         directives: {
             defaultSrc: ["'self'"]
-            // scriptSrc: ["'self'", "'unsafe-inline'"],
-            // styleSrc: ["'self'", "fonts.googleapis.com"],
-            // fontSrc: ["'self'", "fonts.gstatic.com"],
-            // connectSrc: ["'self'", "wss://video.geekwisdom.net"],
         },
     })
 );

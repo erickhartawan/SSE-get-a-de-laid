@@ -9,6 +9,7 @@ var sanitizer = require('sanitize')();
 const { v4 } = require("uuid");
 const jwt = require('jsonwebtoken');
 var crypto = require("crypto");
+const { check, validationResult } = require('express-validator');
 var sql = require("yesql").pg;
 const { initializeApp } = require("firebase/app");
 const {
@@ -20,7 +21,6 @@ const {
 
 } = require("firebase/auth");
 var onAuthStateChanged = require("firebase/auth");
-const { Sanitizer } = require("sanitize");
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 // Your web app's Firebase configuration
@@ -122,10 +122,15 @@ router.get("/login", function (req, res, next) {
     
 });
 
+var loginValidate = [
+    check('usernuserEmail').isEmail(),
+    check('userPassword')];
+
+
 //? POST Request
-router.post("/login", async function (req, res, next) {
-    var userEmail = sanitizer.value(req.body.userEmail, 'string'); //TODO change variable after discussing with the frontend team
-    var userPassword = sanitizer.value(req.body.userPassword, 'string'); //TODO change variable after discussing with the frontend team
+router.post("/login", loginValidate, async function (req, res, next) {
+    var userEmail = sanitizer.value(req.body.userEmail); //TODO change variable after discussing with the frontend team
+    var userPassword = sanitizer.value(req.body.userPassword); //TODO change variable after discussing with the frontend team
     userPasswordHash = crypto
         .createHash("sha256")
         .update(userPassword)
@@ -161,24 +166,39 @@ router.post("/login", async function (req, res, next) {
     });
 });
 
-router.post("/signup", async function (req, res, next) {
+var signupValidate = [
+    check('firstName'),
+    check('lastName'),
+    check('age').isNumeric(),
+    check('phoneNumber').isLength({ min: 10 }),
+    check('gender'),
+    check('language'),
+    check('vaccineStatus'),
+    check('dpLink'),
+    check('country'),
+    check('bio'),
+    check('interest'),
+    check('password').isLength({ min: 8 })];
+  
+
+router.post("/signup", signupValidate, async function (req, res, next) {
     var newId = v4();
-    var userFirstName = sanitizer.value( req.body.firstName, 'string');
-    var userLastName = sanitizer.value(req.body.lastName, 'string') ;
-    var userAge = sanitizer.value(req.body.age, 0);
-    var userPhoneNumber = sanitizer.value(req.body.phoneNumber, 0);
-    var userGender = sanitizer.value(req.body.gender, 'NA');
-    var userLanguage = sanitizer.value(req.body.language, 'NA');
-    var userVaccineStatus = sanitizer.value(req.body.vaccineStatus, 'false,false');
-    var userDpLink = sanitizer.value(req.body.dpLink, 'https://picsum.photos/seed/picsum/200/300'); // one link for video 
-    var userCountry = sanitizer.value(req.body.country, 'NA');
-    var userBio = sanitizer.value(req.body.bio, 'hehe');
-    var userInterests = sanitizer.value(req.body.interest, 'cricket,football');
+    var userFirstName = req.body.firstName;
+    var userLastName = req.body.lastName;
+    var userAge = req.body.age;
+    var userPhoneNumber = req.body.phoneNumber;
+    var userGender = req.body.gender;
+    var userLanguage = req.body.language;
+    var userVaccineStatus = req.body.vaccineStatus;
+    var userDpLink = req.body.dpLink; // one link for video 
+    var userCountry = req.body.country;
+    var userBio = req.body.bio;
+    var userInterests = req.body.interest;
     let userLastLogin = new Date();
-    var userImages = sanitizer.value(req.body.images, 'https://picsum.photos/seed/picsum/200/300'); // array of links for images
-    var userTravelInterests = sanitizer.value(req.body.travelInterests, 'bali,las vegas');
-    var userEmail = sanitizer.value(req.body.userEmail, 'hehe@hehe.com'); //TODO change variable after discussing with the frontend team
-    var userPassword = sanitizer.value(req.body.userPassword, 'root'); //TODO change variable after discussing with the frontend team
+    var userImages = req.body.images; // array of links for images
+    var userTravelInterests = req.body.travelInterests;
+    var userEmail = req.body.userEmail; //TODO change variable after discussing with the frontend team
+    var userPassword = req.body.userPassword; //TODO change variable after discussing with the frontend team
     userPasswordHash = crypto
         .createHash("sha256")
         .update(userPassword)
@@ -187,6 +207,7 @@ router.post("/signup", async function (req, res, next) {
     userTravelInterests = userTravelInterests.split(","); // from strings to arrays
     userImages = userImages.split(",")
     userLanguage = userLanguage.toString().split(",");
+    userInterests = userInterests.split(",");
     var userData = await client.query(
         sql(
             "INSERT INTO userdetails VALUES (:userGuid, :user_first_name, :user_last_name, :user_age, :user_phone, :user_email, :user_country, :user_gender, :user_password, :user_dp_link, :user_last_login, :user_language, :user_authenticated, :user_vaccine_status);"
