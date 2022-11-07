@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { MoreResources, DisplayFormikState } from "../Auth/helper";
+import { MoreResources, DisplayFormikState } from "../helper";
 export const Covid = () => {
     return (
         <div className="flex flex-col">
@@ -161,6 +161,7 @@ export const Covid = () => {
                             <button
                                 className="self-center justify-self-center bg-white w-fit p-1 rounded-md"
                                 type="submit"
+                                click
                             >
                                 Validate
                             </button>
