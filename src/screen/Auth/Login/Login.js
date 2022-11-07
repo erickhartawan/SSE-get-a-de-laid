@@ -41,7 +41,7 @@ function Login () {
 
     return(
         <div className="flex flex-col">
-            <div className="my-5 text-2xl self-center">You are one step away from getting laid</div>
+            <div className="my-5 text-2xl self-center">You are one step away from getting-a-de-laid</div>
             <div className="my-5 text-2xl self-center">Login with email address</div>
             <Formik
                 initialValues={{ email: "", password: "" }}

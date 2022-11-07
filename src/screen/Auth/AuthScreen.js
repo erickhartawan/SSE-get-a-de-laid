@@ -2,13 +2,14 @@ import {useParams, Route, Routes, useLocation } from "react-router-dom"
 import Login from "./Login/Login";
 import SignUp from "./SignUp/SignUp";
 import logo from "../../assets/images/logo-white-purple.png"
+import CombinedForm from "./SignUp/combinedForm";
 
 
 function AuthScreen() {
     let url = useLocation().pathname;
     let auth;
     // determine if user sign up or login
-    if (url == "/signup") auth = <SignUp />;
+    if (url == "/signup") auth = <CombinedForm />;
     else auth = <Login />; 
     return(
         <div className="w-full flex flex-row justify-center my-5 mt-0 mx-10">
@@ -18,7 +19,7 @@ function AuthScreen() {
             <div className="flex basis-1/4 h-screen bg-primary items-center pt-20 flex-col">
                 <img src={logo} className="w-36 h-36" alt="get-a-de-laid logo" />
                 <div className="p-5 text-white text-center">
-                    Find your soulmate in Adelaide and Choose the getaway provided by our partner
+                    Find your soulmate in Adelaide and Choose the getaway provided by our partners
                 </div>
             </div>  
         </div>

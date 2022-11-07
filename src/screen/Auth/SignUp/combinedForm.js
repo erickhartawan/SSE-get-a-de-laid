@@ -50,12 +50,8 @@ export const CombinedForm = () => {
 
     return (
         <div className="flex flex-col">
-            <div className="my-5 text-2xl self-center">
-                {/* You are one step away from getting laid */}
-            </div>
-            <div className="my-5 text-2xl self-center">
-                {/* sign up with email address */}
-            </div>
+            <div className="my-5 text-2xl self-center">You are one step away from getting-a-de-laid</div>
+            <div className="my-5 text-2xl self-center">Sign up with email address</div>
             <Formik
                 initialValues={{
                     email: "",
@@ -87,7 +83,7 @@ export const CombinedForm = () => {
                         .email("Invalid email")
                         .required("Required"),
                     password: Yup.string()
-                        .min(6, "Too Short!")
+                        .min(8, "Too Short!")
                         .notRequired("Required"),
                     confirmPassword: Yup.string().oneOf(
                         [Yup.ref("password"), null],

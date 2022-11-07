@@ -5,13 +5,24 @@ import * as Yup from "yup";
 import axios from 'axios';
 
 function Payment() {
+    const getCSRFToken = async () => {
+        const response = await axios.get('/getCSRFToken');
+        axios.defaults.headers.post['X-CSRF-Token'] = response.data.CSRFToken;
+     };
+
+    useEffect(()=>{
+        getCSRFToken();
+    },[]);
+
     const handleOnSubmit = (e,values) =>{
         e.preventDefault();
+        getCSRFToken();
         setTimeout(()=>{
             alert("payment succesful");
         },1000)
 
     }
+
     return (
 
         <div className="flex flex-col">
@@ -26,7 +37,8 @@ function Payment() {
 
                 }}
                 onSubmit = {(e,values) => {
-                    console.log(values)
+                    getCSRFToken();
+
                     e.preventDefault();
                     setTimeout(()=>{
                         alert("payment succesful");
