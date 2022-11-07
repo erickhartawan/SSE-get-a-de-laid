@@ -74,8 +74,8 @@ export const CombinedForm = () => {
                     bio: "",
                     interest: "",
                     images: "",
-                    userEmail: "hartawanerick@gmail.com", //temp
-                    userPassword: "qwertyuiop[]", // temp
+                    userEmail: "", //temp
+                    userPassword: "", // temp
                     country: "australia", // temp
                     travelInterests: "adelaide,valley,glenelg",
                 }}
@@ -104,7 +104,7 @@ export const CombinedForm = () => {
                     console.log(values);
                     setSubmitting(false);
                     axios
-                        .post("http://127.0.0.1/signup", values)
+                        .post("http://127.0.0.1:3005/signup", values)
                         .then((res) => {
                             console.log(res);
                         })
@@ -179,7 +179,7 @@ export const CombinedForm = () => {
                                             }
                                             type="password"
                                             name="password"
-                                            placeholder=""
+                                            placeholder="**********"
                                         />
                                     </div>
                                     {touched.password && errors.password && (
@@ -205,7 +205,7 @@ export const CombinedForm = () => {
                                             }
                                             type="password"
                                             name="confirmPassword"
-                                            placeholder=""
+                                            placeholder="********"
                                         />
                                     </div>
                                     {touched.password && errors.password && (
@@ -259,7 +259,7 @@ export const CombinedForm = () => {
                                             value={values.firstName}
                                             type="text"
                                             name="firstName"
-                                            placeholder="Email"
+                                            placeholder="First Name"
                                         />
                                     </div>
                                 </div>
@@ -276,7 +276,7 @@ export const CombinedForm = () => {
                                             value={values.lastName}
                                             type="text"
                                             name="lastName"
-                                            placeholder="Email"
+                                            placeholder="Last Name"
                                         />
                                     </div>
                                 </div>
@@ -424,7 +424,7 @@ export const CombinedForm = () => {
                                             value={values.phoneNumber}
                                             type="text"
                                             name="phoneNumber"
-                                            placeholder="Email"
+                                            placeholder="Phone Number"
                                         />
                                     </div>
                                 </div>
