@@ -102,6 +102,15 @@ export const CombinedForm = () => {
                 })}
                 onSubmit={(values, { setSubmitting }) => {
                     console.log(values);
+                    setSubmitting(false);
+                    axios
+                        .post("http://127.0.0.1/signup", values)
+                        .then((res) => {
+                            console.log(res);
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                        });
                     setTimeout(() => {
                         alert(JSON.stringify(values, null, 2));
                         setSubmitting(false);
