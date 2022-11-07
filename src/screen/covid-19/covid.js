@@ -2,6 +2,7 @@ import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { MoreResources, DisplayFormikState } from "../Auth/helper";
+import axios from "axios";
 export const Covid = () => {
     return (
         <div className="flex flex-col">
@@ -11,10 +12,13 @@ export const Covid = () => {
             <Formik
                 initialValues={{ doc_num: "", dob: "", num_doses: 0, ihi: "", last_dose:"" }}
                 onSubmit={(values, { setSubmitting }) => {
-                    setTimeout(() => {
-                        alert(JSON.stringify(values, null, 2));
-                        setSubmitting(false);
-                    }, 500);
+                    // When covid form is submitted, perform check with government's API
+                    const GOV_VACCINE_CHECKER_API = "https://some_govt_api.com/verify" // placeholder
+                    axios.post(GOV_VACCINE_CHECKER_API, values).then(res =>{
+                        // if res is successful; set user vaccine status to true
+                    } ).catch(err =>{
+                        console.log(err)
+                    })
                 }}
                 validationSchema={Yup.object().shape({
                     doc_num: Yup.string().required("Required").matches("^[0-9]{12}$", "Only 12 digits allowed"),

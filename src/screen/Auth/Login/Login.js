@@ -3,8 +3,8 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { MoreResources, DisplayFormikState } from "../helper";
 import { useSelector, useDispatch } from 'react-redux'
-import { login, logout, toggle } from '../../../store/authSlice/authSlice';
 import { setCurrUser } from '../../../store/currUserSlice/currUserSlice';
+import { login, logout, toggle } from '../../../store/authSlice/authSlice';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
