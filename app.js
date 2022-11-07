@@ -9,6 +9,8 @@ var usersRouter = require("./routes/users");
 var helmet = require("helmet");
 var cors = require('cors');
 const { Client } = require("pg");
+var session = require("express-session");
+var csurf = require("csurf");
 const dotenv = require("dotenv");
 dotenv.config();
 var cors = require('cors')
@@ -30,10 +32,15 @@ const rateLimit = require("express-rate-limit");
         message: "Too many requests from this IP, please try again"
     });
 app.use(limiter);
-
-// view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
+app.use(session({
+    resave: true,
+    saveUninitialized: true,
+    secret: process.env.APP_TOKEN,
+    cookie: {
+        httpOnly: true
+    },
+    resave: false,
+}));
 
 app.use(helmet());
 app.use(cors());
@@ -42,10 +49,6 @@ app.use(
         useDefaults: false,
         directives: {
             defaultSrc: ["'self'"]
-            // scriptSrc: ["'self'", "'unsafe-inline'"],
-            // styleSrc: ["'self'", "fonts.googleapis.com"],
-            // fontSrc: ["'self'", "fonts.gstatic.com"],
-            // connectSrc: ["'self'", "wss://video.geekwisdom.net"],
         },
     })
 );

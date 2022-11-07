@@ -4,12 +4,12 @@ var router = express.Router();
 const { Pool } = require("pg");
 const dotenv = require("dotenv");
 dotenv.config();
+
+var sanitizer = require('sanitize')();
 const { v4 } = require("uuid");
 const jwt = require('jsonwebtoken');
-const cors = require('cors');
 var crypto = require("crypto");
-var token = require('crypto').randomBytes(64).toString('hex');
-console.log(token);
+const { check, validationResult } = require('express-validator');
 var sql = require("yesql").pg;
 const { initializeApp } = require("firebase/app");
 const {
@@ -93,7 +93,7 @@ router.get("/", function (req, res, next) {
 
     if (token == null) return res.sendStatus(401)
 
-    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+    jwt.verify(token, process.env.APP_TOKEN, (err, user) => {
         console.log(err)
 
         if (err) return res.sendStatus(403)
@@ -106,13 +106,31 @@ router.get("/", function (req, res, next) {
 
 //? GET Request
 router.get("/login", function (req, res, next) {
-    res.json(responseMaker({}, "enter login credentials", true));
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]
+
+    if (token == null) return res.sendStatus(401)
+
+    jwt.verify(token, process.env.APP_TOKEN, (err, user) => {
+        console.log(err)
+
+        if (err) return res.sendStatus(403)
+
+        req.user = user
+        res.json(responseMaker({token}, "enter login credentials", true));
+    });
+    
 });
 
+var loginValidate = [
+    check('usernuserEmail').isEmail(),
+    check('userPassword')];
+
+
 //? POST Request
-router.post("/login", async function (req, res, next) {
-    var userEmail = req.body.userEmail; //TODO change variable after discussing with the frontend team
-    var userPassword = req.body.userPassword; //TODO change variable after discussing with the frontend team
+router.post("/login", loginValidate, async function (req, res, next) {
+    var userEmail = sanitizer.value(req.body.userEmail); //TODO change variable after discussing with the frontend team
+    var userPassword = sanitizer.value(req.body.userPassword); //TODO change variable after discussing with the frontend team
     userPasswordHash = crypto
         .createHash("sha256")
         .update(userPassword)
@@ -125,8 +143,19 @@ router.post("/login", async function (req, res, next) {
             userPassword: userPasswordHash,
         })
     );
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]
+
+    if (token == null) return res.sendStatus(401)
+
+    jwt.verify(token, process.env.APP_TOKEN, async (err, user) => {
+        console.log(err)
+
+        if (err) return res.sendStatus(403)
+
+        req.user = user
     if ((await userData).rowCount > 0) {
-        var userToken = jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
+        var userToken = jwt.sign(username, process.env.APP_TOKEN, { expiresIn: '1800s' });
         (await userData).rows[0]['token'] = userToken;
         res.json(responseMaker((await userData).rows[0], "user found", true));
 
@@ -134,11 +163,26 @@ router.post("/login", async function (req, res, next) {
     }
 
     else res.json(responseMaker({}, "user not found", true));
+    });
 });
 
-router.post("/signup", async function (req, res, next) {
+var signupValidate = [
+    check('firstName'),
+    check('lastName'),
+    check('age').isNumeric(),
+    check('phoneNumber').isLength({ min: 10 }),
+    check('gender'),
+    check('language'),
+    check('vaccineStatus'),
+    check('dpLink'),
+    check('country'),
+    check('bio'),
+    check('interest'),
+    check('password').isLength({ min: 8 })];
+  
+
+router.post("/signup", signupValidate, async function (req, res, next) {
     var newId = v4();
-    console.log(req.body);
     var userFirstName = req.body.firstName;
     var userLastName = req.body.lastName;
     var userAge = req.body.age;
@@ -163,6 +207,7 @@ router.post("/signup", async function (req, res, next) {
     userTravelInterests = userTravelInterests.split(","); // from strings to arrays
     userImages = userImages.split(",")
     userLanguage = userLanguage.toString().split(",");
+    userInterests = userInterests.split(",");
     var userData = await client.query(
         sql(
             "INSERT INTO userdetails VALUES (:userGuid, :user_first_name, :user_last_name, :user_age, :user_phone, :user_email, :user_country, :user_gender, :user_password, :user_dp_link, :user_last_login, :user_language, :user_authenticated, :user_vaccine_status);"
