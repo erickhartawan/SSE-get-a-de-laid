@@ -2,27 +2,38 @@ import axios from 'axios';
 import React,{useEffect} from 'react';
 import { Masonry } from '@mui/lab';
 import OtherUsers from './OtherUsers.json';
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { setCurrUser } from '../../store/currUserSlice/currUserSlice';
+import VacIndicator from '../VacIndicator/VacIndicator';
+
+
 // import image1 from '../../assets/placeholders/1.jpg'
 function PartnerProfile(props) {
-    const {isOwnProfile,user_id} = props
+    const BACKEND_URL = "http://127.0.0.1:3005/"
+    const {isOwnProfile, user_id} = props
+    const dispatch = useDispatch();
 
-    let randomImage = 'https://source.unsplash.com/random/400x400?face';
-    // useEffect(() =>{
-    //     // axios.get("https://source.unsplash.com/random").then(res =>{
-    //     //     console.log(res);
-    //     //     // randomImage = res.data;
-    //     //     randomImage = "https://source.unsplash.com/random"
-    //     })
-    // },[])
 
+    let randomImage = 'https://source.unsplash.com/random/400x400?face'; // fallback
     let name = ""; // string
     let gender = ""; // string
     let age = 0; // number
     let interest = []; // array of text
     let photos = []; // array of url
     let travelInterest = []; // array of text
+    let images = [""];
+    let profileImage="";
+    let vaccineStatus= [];
     
+    
+
+    useEffect(() =>{
+        axios.get(`${BACKEND_URL}home`).then(res =>{
+            const data = res.data.data;
+            dispatch(setCurrUser(data));
+
+        })
+    },[])
     //Selector to get data from store
     // bit inefficient but it's ok
     name = useSelector(state => state.currUser.userName);
@@ -31,6 +42,9 @@ function PartnerProfile(props) {
     interest = useSelector(state => state.currUser.interest);
     photos = useSelector(state => state.currUser.photos);
     travelInterest = useSelector(state => state.currUser.travelInterest);
+    images = useSelector(state => state.currUser.images);
+    vaccineStatus = useSelector(state => state.currUser.vaccineStatus)
+    profileImage = useSelector(state => state.currUser.images[0])
     
     if(isOwnProfile == false){
         const displayData = OtherUsers.filter(e => e.userId == user_id);
@@ -40,8 +54,12 @@ function PartnerProfile(props) {
             gender = displayData[0].gender
             age = displayData[0].age
             interest = displayData[0].interest
-            photos = displayData[0].photos
+            images = displayData[0].photos
             travelInterest = displayData[0].travelInterest
+            profileImage= displayData[0].photos[0]
+            
+
+            // dpLink = displayData[0].dpLink
         }
     }
         
@@ -59,7 +77,7 @@ function PartnerProfile(props) {
         return(
             <div className="w-full flex flex-col justify-start items-start p-4"> 
                 <div className="partner-hero-img justify-center align-center w-full">
-                    <img className="max-h-[35vh] rounded-lg object-scale-down flex-start" src={randomImage} alt="Profile photo of first user" />
+                    <img className="max-h-[35vh] rounded-lg object-scale-down flex-start" src={profileImage} alt="Profile photo of first user" />
                 </div>
                 <div className="partner-text-info p-2 px-4 mt-10 flex-col bg-slate-100 justify-center">
                     <div className="about-partner-jumbo text-primary font-bold text-2xl justify-center"> About this person: </div>
@@ -77,6 +95,10 @@ function PartnerProfile(props) {
                         })}
 
                     </div>
+                    <div className="flex justify-center flex-col items-center">
+                        <h3 className="partner-interest font-semibold text-2xl text-primary mt-2 justify-center"> Vaccine status: </h3>
+                        <VacIndicator status={vaccineStatus} />
+                    </div>
                     <div className="photos masonary flex flex-col justify-center">
                         <h3 className="partner-interest font-semibold text-2xl text-primary mt-2 justify-center mb-2 "> Other Images: </h3>
                         <Masonry
@@ -84,7 +106,7 @@ function PartnerProfile(props) {
                             spacing={1}
                             defaultHeight={500}
                         >
-                            {photos.map((each,index) => (
+                            {images.map((each,index) => (
                                 <div key={index} onClick={() => handleClickImages(each)}> 
                                     <img src={each}  />
                                 </div>
