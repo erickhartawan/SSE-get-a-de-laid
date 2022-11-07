@@ -228,8 +228,10 @@ router.post("/signup", async function (req, res, next) {
 
 router.get("/home", async function (req, res, next) {
     var userData = client.query("select * from userprofile;");
-    if ((await userData).rowCount > 0)
-        res.json(responseMaker((await userData).rows[0], "user found", true));
+    var userDetails = client.query(" select * from userdetails;")
+    if ((await userData).rowCount > 0){
+        res.json(responseMaker((await userData).rows[1], "user found", true));
+    }
     else res.json(responseMaker({}, "user not found", true));
 });
 

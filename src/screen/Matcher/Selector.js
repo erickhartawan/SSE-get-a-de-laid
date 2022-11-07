@@ -10,6 +10,7 @@ function Selector(props) {
     }
     const handleYesLove = () =>{
         console.log("Love Clicked");
+        navigate('/chatroom');
     }
     return ( 
         <div className="w-full flex flex-row justify-between px-2 py-1">

@@ -42,7 +42,7 @@ export const Covid = () => {
                         </div>
                         <div className="w-full flex flex-row mb-5">
                             <div className="flex basis-1/2 w-full p-1">
-                                document number
+                                Document Number
                             </div>
                             <div className="flex basis-1/2 w-full">
                                 <input
@@ -81,7 +81,7 @@ export const Covid = () => {
                                         "1px solid red"
                                     }
                                     type="text"
-                                    name="doc_num"
+                                    name="ihi"
                                     placeholder="Enter IHI number"
                                 />
                             </div>

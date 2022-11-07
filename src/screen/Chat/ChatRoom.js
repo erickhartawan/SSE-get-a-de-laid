@@ -1,10 +1,13 @@
 import React, {useState} from 'react'
 import messages from './dummyMessage.json'
+import {useNavigate, Link} from 'react-router-dom'
+
 function ChatRoom() {
     const [sender, setSender] = useState('1');
     const [receiver, setReceiver] = useState('3');
     const [currMessage, setCurrMessage] = useState("");
     const [thread, setThread] = useState(messages);
+    const navigate = useNavigate();
     const senderName = "Alice"
     const receiverName = "Bob"
 
@@ -43,6 +46,9 @@ function ChatRoom() {
         let newThread = [...thread, newMsg];
         setThread(newThread)
     }
+    const handleClickBook = () => {
+        navigate("/book-trip")
+    }
 
     return ( 
     <div className="container w-full p-5 bg-slate-300 flex flex-col">
@@ -61,6 +67,11 @@ function ChatRoom() {
                 onChange={handleChange}></textarea>
             <div className='w-10 rounded-lg px-10 flex justify-center items-center ml-4 bg-primary text-white hover:bg-secondary' onClick={handleClickSend}>send</div>
         </div>
+        <Link to="/booking">
+            <div className="flex w-full justify-center items-center h-12 rounded-lg mt-2 bg-primary text-white hover:bg-secondary">
+                Book a trip
+            </div>
+        </Link>
     </div>
     );
 }

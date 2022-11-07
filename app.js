@@ -23,6 +23,14 @@ var client = new Client({
 client.connect();
 var app = express();
 
+const rateLimit = require("express-rate-limit");
+    const limiter = rateLimit({
+        windowMs: 10000,
+        max: 200,
+        message: "Too many requests from this IP, please try again"
+    });
+app.use(limiter);
+
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
