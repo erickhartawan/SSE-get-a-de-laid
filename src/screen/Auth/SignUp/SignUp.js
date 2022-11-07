@@ -7,6 +7,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 const recaptchaRef = React.createRef();
 const siteKey = "6LfB2MUiAAAAANDPR5wPJIIcxD_Vw-JbVjFYdrV4";
 export const SignUp = () => {
+    
     console.log("MyForm has been called");
     return (
         <div className="flex flex-col">
@@ -24,7 +25,7 @@ export const SignUp = () => {
                         setSubmitting(false);
                     }, 500);
                 }}
-                validationSchema={Yup.object().shape({
+                validationSchema = {Yup.object().shape({
                     email: Yup.string()
                         .email("Invalid email")
                         .required("Required"),
