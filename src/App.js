@@ -26,7 +26,7 @@ function App() {
           <Route path="/" element={<Landing />}/>
           <Route path="/signup" element={<AuthScreen />}/>
           <Route path="/covid-19" element={<Covid />}/>
-          <Route path="/combined" element={<CombinedForm />}/>
+          <Route path="/user-form" element={<CombinedForm />}/>
           <Route path="/user-register" element={<UserInfo />}/> //register
           <Route path="/login" element={<AuthScreen />} />
           <Route path="/landing" element={<Landing />} />

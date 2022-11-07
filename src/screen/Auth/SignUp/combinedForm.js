@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { MoreResources, DisplayFormikState } from "../helper";
@@ -8,11 +8,10 @@ import ReCAPTCHA from "react-google-recaptcha";
 const recaptchaRef = React.createRef();
 const siteKey = "6LfB2MUiAAAAANDPR5wPJIIcxD_Vw-JbVjFYdrV4";
 
-
 export const CombinedForm = () => {
-    const [step1, setStep1] = useState(true)
-    const [step2, setStep2] = useState(false)
-    const [step3, setStep3] = useState(false)
+    const [step1, setStep1] = useState(true);
+    const [step2, setStep2] = useState(false);
+    const [step3, setStep3] = useState(false);
 
     const handleOnSubmitUserDetails = (e, data) => {
         e.preventDefault();
@@ -29,23 +28,22 @@ export const CombinedForm = () => {
     };
 
     const backButtonStepTwo = () => {
-        setStep1(true)
-        setStep2(false)
-        setStep3(false)
-    }
+        setStep1(true);
+        setStep2(false);
+        setStep3(false);
+    };
 
     const onSubmitStepOne = () => {
-        setStep1(false)
-        setStep2(true)
-        setStep3(false)
+        setStep1(false);
+        setStep2(true);
+        setStep3(false);
     };
 
     const onSubmitStepTwo = () => {
-        setStep1(false)
-        setStep2(false)
-        setStep3(true)
+        setStep1(false);
+        setStep2(false);
+        setStep3(true);
     };
-
 
     return (
         <div className="flex flex-col">
@@ -460,21 +458,22 @@ export const CombinedForm = () => {
                                         />
                                     </div>
                                 </div>
-                                
-                                <button
-                                    className="self-center justify-content-center bg-white w-fit p-1 rounded-md"
-                                    onClick={backButtonStepTwo}
-                                >
-                                    Back
-                                </button>
+                                <div className="flex flex-row justify-between w-full">
+                                    <button
+                                        className="self-center justify-content-center bg-white w-fit p-1 rounded-md"
+                                        onClick={backButtonStepTwo}
+                                    >
+                                        Back
+                                    </button>
 
-                                <button
-                                    className="self-center justify-self-center bg-white w-fit p-1 rounded-md"
-                                    type="button"
-                                    onClick={onSubmitStepTwo}
-                                >
-                                    Submit
-                                </button>
+                                    <button
+                                        className="self-center justify-self-center bg-white w-fit p-1 rounded-md"
+                                        type="button"
+                                        onClick={onSubmitStepTwo}
+                                    >
+                                        Submit
+                                    </button>
+                                </div>
                             </div>
                         )}
 
@@ -594,21 +593,23 @@ export const CombinedForm = () => {
                                 </div>
 
                                 {/* <div className="flex flex-col"> */}
-                                <button
-                                    className="self-center justify-content-center bg-white w-fit p-1 rounded-md"
-                                    onClick={onSubmitStepOne}
-                                >
-                                    Back
-                                </button>
+                                <div className="flex flex-row justify-between w-full">
+                                    <button
+                                        className="self-center justify-content-center bg-white w-fit p-1 rounded-md"
+                                        onClick={onSubmitStepOne}
+                                    >
+                                        Back
+                                    </button>
 
-                                <button
-                                    className="self-center justify-self-center bg-white w-fit p-1 rounded-md"
-                                    type="submit"
-                                >
-                                    Validate
-                                </button>
+                                    <button
+                                        className="self-center justify-self-center bg-white w-fit p-1 rounded-md"
+                                        type="submit"
+                                    >
+                                        Validate
+                                    </button>
                                 </div>
-                                
+                            </div>
+
                             // </div>
                         )}
 
